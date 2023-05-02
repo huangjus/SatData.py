@@ -24,19 +24,20 @@ class SatData:
             self.__data = json.load(file)
 
     def save_as_csv(self, dbns):
-        """
-        Takes a list of DBNs (district bureau numbers) as a parameter and
-        saves a CSV file with rows corresponding to the DBNs in the list.
-        The rows in the CSV file are sorted in ascending order by DBN.
-        """
+    """
+    Takes a list of DBNs (district bureau numbers) as a parameter and
+    saves a CSV file with rows corresponding to the DBNs in the list.
+    The rows in the CSV file are sorted in ascending order by DBN.
+    """
 
-        filtered_data = sorted([row for row in self.__data if row.get("DBN") in dbns], key=lambda x: x.get("DBN"))
+    filtered_data = sorted([row for row in self.__data if isinstance(row, dict) and row.get("DBN") in dbns], key=lambda x: x.get("DBN"))
 
-        with open("output.csv", "w") as csvfile:
-            csvfile.write(
-                "DBN,School Name,Number of Test Takers,Critical Reading Mean,Mathematics Mean,Writing Mean\n")
+    with open("output.csv", "w") as csvfile:
+        csvfile.write(
+            "DBN,School Name,Number of Test Takers,Critical Reading Mean,Mathematics Mean,Writing Mean\n")
 
-            for row in filtered_data:
+        for row in filtered_data:
+            if isinstance(row, dict):
                 school_name = row.get("School Name")
                 if ',' in school_name:
                     school_name = f'"{school_name}"'
