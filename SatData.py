@@ -34,7 +34,7 @@ class SatData:
 
         with open("output.csv", "w") as csvfile:
             csvfile.write(
-                "DBN,School Name,Number of Test Takers,Critical Reading Mean,SAT Mathematics Mean,Writing Mean\n")
+                "DBN,School Name,Number of Test Takers,Critical Reading Mean,Mathematics Mean,Writing Mean\n")
 
             for row in filtered_data:
                 school_name = row["School Name"]
