@@ -29,20 +29,19 @@ class SatData:
         saves a CSV file with rows corresponding to the DBNs in the list.
         The rows in the CSV file are sorted in ascending order by DBN.
         """
-        
+
         filtered_data = sorted([row for row in self.__data if row["DBN"] in dbns], key=lambda x: x["DBN"])
 
         with open("output.csv", "w") as csvfile:
             csvfile.write(
-                "DBN,SCHOOL NAME,Num of SAT Test Takers,SAT Critical Reading Avg. Score,SAT Math Avg. "
-                "Score,SAT Writing Avg. Score\n")
+                "DBN,School Name,Number of Test Takers,Critical Reading Mean,SAT Mathematics Mean,Writing Mean\n")
 
             for row in filtered_data:
-                school_name = row["SCHOOL NAME"]
+                school_name = row["School Name"]
                 if ',' in school_name:
                     school_name = f'"{school_name}"'
 
                 csvfile.write(
-                    f'{row["DBN"]},{school_name},{row["Num of SAT Test Takers"]},'
-                    f'{row["SAT Critical Reading Avg. Score"]},{row["SAT Math Avg. Score"]},'
-                    f'{row["SAT Writing Avg. Score"]}\n')
+                    f'{row["DBN"]},{school_name},{row["Number of Test Takers"]},'
+                    f'{row["Critical Reading Mean"]},{row["Mathematics Mean"]},'
+                    f'{row["Writing Mean"]}\n')
