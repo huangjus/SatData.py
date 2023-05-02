@@ -10,38 +10,34 @@ import json
 
 class SatData:
     """
-    This class reads a JSON file containing data on 2010 SAT results for
-    New York City and writes the data to a text file in CSV format.
+    A class that reads a JSON file containing data on 2010 SAT results for New York City
+    and writes the data to a text file in CSV format.
     """
 
     def __init__(self):
         """
-        Initializes the SatData class by reading the JSON file and storing
-        the data in a private data member.
+        Initializes the SatData object by reading the JSON file and storing the data in a data member.
         """
-
-        with open("sat.json", "r") as file:
-            self.__data = json.load(file)
+        
+        with open('sat.json') as f:
+            self.data = json.load(f)
 
     def save_as_csv(self, dbns):
-    """
-    Takes a list of DBNs (district bureau numbers) as a parameter and
-    saves a CSV file with rows corresponding to the DBNs in the list.
-    The rows in the CSV file are sorted in ascending order by DBN.
-    """
-
-    filtered_data = sorted([row for row in self.__data if isinstance(row, dict) and row.get("DBN") in dbns], key=lambda x: x.get("DBN"))
-
-    with open("output.csv", "w") as csvfile:
-        csvfile.write(
-            "DBN,School Name,Number of Test Takers,Critical Reading Mean,Mathematics Mean,Writing Mean\n")
-
-        for row in filtered_data:
-            if isinstance(row, dict):
-                school_name = row.get("School Name")
-                if ',' in school_name:
-                    school_name = f'"{school_name}"'
-
-                csvfile.write(
-                    f'{row.get("DBN")},{school_name},{row.get("Number of Test Takers")},'
-                    f'{row.get("Critical Reading Mean")},{row.get("Mathematics Mean")},{row.get("Writing Mean")}\n')
+        """
+        Writes a CSV file containing SAT data for the given DBNs.
+        """
+        
+        rows = []
+        headers = ['DBN', 'School Name', 'Number of Test Takers', 'Critical Reading Mean', 'Mathematics Mean',
+                   'Writing Mean']
+        rows.append(','.join(headers))
+        for record in self.data:
+            if record['DBN'] in dbns:
+                row = [record['DBN'], record['School Name'], record['Number of Test Takers'],
+                       record['Critical Reading Mean'], record['Mathematics Mean'],
+                       record['Writing Mean']]
+                row = ['"{}"'.format(x) if ',' in x else x for x in row]  # Handling commas in School Name
+                rows.append(','.join(row))
+        rows.sort()
+        with open('output.csv', 'w') as f:
+            f.write('\n'.join(rows))
